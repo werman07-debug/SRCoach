@@ -249,6 +249,15 @@ Antworte NUR mit einem JSON-Objekt (kein Markdown):
           const block = auswertung[key];
           if (!block) return null;
           return (
+             <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "1rem", padding: "1rem", marginBottom: "0.75rem" }}>
+          <div style={{ fontSize: "0.85rem", fontWeight: "bold", color: "#93c5fd", marginBottom: "0.75rem" }}>📝 ALLE NOTIZEN</div>
+          {notizen.map((n) => (
+            <div key={n.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)", paddingBottom: "0.5rem", marginBottom: "0.5rem" }}>
+              <span style={{ color: "#3b82f6", fontSize: "0.75rem", marginRight: "0.5rem" }}>{n.zeit}</span>
+              <span style={{ fontSize: "0.85rem", color: "#94a3b8", lineHeight: "1.6" }}>{n.text}</span>
+            </div>
+          ))}
+        </div>
             <div key={key} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "1rem", padding: "1rem", marginBottom: "0.75rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
                 <div style={{ fontSize: "0.85rem", fontWeight: "bold", color: "#93c5fd" }}>{label}</div>

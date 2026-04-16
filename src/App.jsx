@@ -87,7 +87,6 @@ export default function SchiriCoachApp() {
 
   const generiereAuswertung = async () => {
     setGenerating(true);
-    console.log("Starte Auswertung...");
     const alleNotizen = notizen.map((n) => `[${n.zeit}] ${n.text}`).join("\n");
 
     try {
@@ -245,19 +244,12 @@ Antworte NUR mit einem JSON-Objekt (kein Markdown):
       </div>
 
       <div style={{ padding: "1rem 1.5rem" }}>
+
+        {/* Bewertungsblöcke */}
         {KATEGORIEN.map(({ label, key }) => {
           const block = auswertung[key];
           if (!block) return null;
           return (
-             <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "1rem", padding: "1rem", marginBottom: "0.75rem" }}>
-          <div style={{ fontSize: "0.85rem", fontWeight: "bold", color: "#93c5fd", marginBottom: "0.75rem" }}>📝 ALLE NOTIZEN</div>
-          {notizen.map((n) => (
-            <div key={n.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)", paddingBottom: "0.5rem", marginBottom: "0.5rem" }}>
-              <span style={{ color: "#3b82f6", fontSize: "0.75rem", marginRight: "0.5rem" }}>{n.zeit}</span>
-              <span style={{ fontSize: "0.85rem", color: "#94a3b8", lineHeight: "1.6" }}>{n.text}</span>
-            </div>
-          ))}
-        </div>
             <div key={key} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "1rem", padding: "1rem", marginBottom: "0.75rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
                 <div style={{ fontSize: "0.85rem", fontWeight: "bold", color: "#93c5fd" }}>{label}</div>
@@ -270,6 +262,7 @@ Antworte NUR mit einem JSON-Objekt (kein Markdown):
           );
         })}
 
+        {/* Fazit */}
         <div style={{ background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.2)", borderRadius: "1rem", padding: "1rem", marginBottom: "0.75rem" }}>
           <div style={{ fontSize: "0.85rem", fontWeight: "bold", color: "#93c5fd", marginBottom: "0.75rem" }}>FAZIT</div>
           <div style={{ marginBottom: "0.75rem" }}>
@@ -289,6 +282,18 @@ Antworte NUR mit einem JSON-Objekt (kein Markdown):
             <div style={{ fontSize: "0.85rem", color: "#cbd5e1", lineHeight: "1.6" }}>{auswertung.gesamteindruck}</div>
           </div>
         </div>
+
+        {/* Alle Notizen als Backup */}
+        <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "1rem", padding: "1rem", marginBottom: "0.75rem" }}>
+          <div style={{ fontSize: "0.85rem", fontWeight: "bold", color: "#93c5fd", marginBottom: "0.75rem" }}>📝 ALLE NOTIZEN</div>
+          {notizen.map((n) => (
+            <div key={n.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)", paddingBottom: "0.5rem", marginBottom: "0.5rem" }}>
+              <span style={{ color: "#3b82f6", fontSize: "0.75rem", marginRight: "0.5rem" }}>{n.zeit}</span>
+              <span style={{ fontSize: "0.85rem", color: "#94a3b8", lineHeight: "1.6" }}>{n.text}</span>
+            </div>
+          ))}
+        </div>
+
       </div>
 
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#0f172a", borderTop: "1px solid rgba(255,255,255,0.08)", padding: "1rem 1.5rem", display: "flex", gap: "0.75rem" }}>

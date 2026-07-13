@@ -1,4 +1,4 @@
-        import { useState, useRef } from "react";
+import { useState, useRef } from "react";
 
 const ANTHROPIC_KEY = import.meta.env.VITE_ANTHROPIC_KEY;
 const OPENAI_KEY = import.meta.env.VITE_OPENAI_KEY;
@@ -29,7 +29,7 @@ export default function SchiriCoachApp() {
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+      const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
       mediaRecorder.ondataavailable = (e) => {
@@ -58,7 +58,7 @@ export default function SchiriCoachApp() {
   const transkribiere = async (blob) => {
     try {
       const formData = new FormData();
-      formData.append("file", blob, "recording.mp3");
+      formData.append("file", blob, "audio.webm");
       formData.append("model", "whisper-1");
       formData.append("language", "de");
 
@@ -93,7 +93,7 @@ export default function SchiriCoachApp() {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
+          model: "claude-sonnet-4-5",
           max_tokens: 2000,
           messages: [{
             role: "user",
@@ -103,29 +103,28 @@ Analysiere folgende Coaching-Beobachtungen für Schiedsrichter ${schiri} (${alte
 Beobachtungen:
 ${alleNotizen}
 
-Antworte NUR mit einem JSON-Objekt (kein Markdown):
+Antworte NUR mit einem JSON-Objekt (kein Markdown, keine Backticks):
 {
   "schwierigkeitsgrad": "einfach oder erhöht oder schwierig",
   "administratives": "i.O. oder n.i.O.",
-  "lauf_stellungsspiel": { "bewertung": "-- oder 0 oder + oder ++", "bemerkung": "2-3 Sätze professioneller Fließtext mit konkreten Spielszenen und Minutenangaben, entwicklungsorientiert" },
+  "lauf_stellungsspiel": { "bewertung": "-- oder 0 oder + oder ++", "bemerkung": "2-3 Sätze" },
   "zweikampfbeurteilung": { "bewertung": "-- oder 0 oder + oder ++", "bemerkung": "2-3 Sätze" },
   "disziplinarkontrolle": { "bewertung": "-- oder 0 oder + oder ++", "bemerkung": "2-3 Sätze" },
   "abseits": { "bewertung": "-- oder 0 oder + oder ++", "bemerkung": "2-3 Sätze" },
   "persoenlichkeit": { "bewertung": "-- oder 0 oder + oder ++", "bemerkung": "2-3 Sätze" },
-  "positiv_1": "Erste positive Erkenntnis als vollständiger Satz",
+  "positiv_1": "Erste positive Erkenntnis",
   "positiv_2": "Zweite positive Erkenntnis",
-  "optimierung_1": "Erstes Optimierungspotential als vollständiger Satz",
+  "optimierung_1": "Erstes Optimierungspotential",
   "optimierung_2": "Zweites Optimierungspotential",
-  "gesamteindruck": "3-4 Sätze entwicklungsorientierter Gesamteindruck"
+  "gesamteindruck": "3-4 Sätze Gesamteindruck"
 }`
           }],
         }),
       });
 
-    const data = await res.json();
-console.log("Debug:", JSON.stringify(data));
-const parsed = data.debug || data;
-const parsed = data.debug?.content?.[0]?.text ? JSON.parse(data.debug.content[0].text.replace(/```json|```/g, "").trim()) : data;
+      const data = await res.json();
+      const text = data.content?.[0]?.text?.replace(/```json|```/g, "").trim();
+      const parsed = JSON.parse(text);
       setAuswertung(parsed);
       setScreen("auswertung");
     } catch (err) {
@@ -254,15 +253,6 @@ const parsed = data.debug?.content?.[0]?.text ? JSON.parse(data.debug.content[0]
             <div style={{ fontSize: "0.75rem", color: "#64748b", marginBottom: "0.25rem" }}>📋 GESAMTEINDRUCK</div>
             <div style={{ fontSize: "0.85rem", color: "#cbd5e1", lineHeight: "1.6" }}>{auswertung.gesamteindruck}</div>
           </div>
-        </div>
-        <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "1rem", padding: "1rem", marginBottom: "0.75rem" }}>
-          <div style={{ fontSize: "0.85rem", fontWeight: "bold", color: "#93c5fd", marginBottom: "0.75rem" }}>📝 ALLE NOTIZEN</div>
-          {notizen.map((n) => (
-            <div key={n.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)", paddingBottom: "0.5rem", marginBottom: "0.5rem" }}>
-              <span style={{ color: "#3b82f6", fontSize: "0.75rem", marginRight: "0.5rem" }}>{n.zeit}</span>
-              <span style={{ fontSize: "0.85rem", color: "#94a3b8", lineHeight: "1.6" }}>{n.text}</span>
-            </div>
-          ))}
         </div>
       </div>
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#0f172a", borderTop: "1px solid rgba(255,255,255,0.08)", padding: "1rem 1.5rem", display: "flex", gap: "0.75rem" }}>

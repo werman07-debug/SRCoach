@@ -87,6 +87,7 @@ export default function SchiriCoachApp() {
 
   const generiereAuswertung = async () => {
     setGenerating(true);
+    console.log("Notizen:", notizen.length, notizen);
     const alleNotizen = notizen.map((n) => `[${n.zeit}] ${n.text}`).join("\n");
 
     try {

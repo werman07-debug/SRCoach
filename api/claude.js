@@ -21,8 +21,12 @@ export default async function handler(req, res) {
     const data = await response.json();
     const rawText = data.content?.[0]?.text || "";
     const cleanText = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
-    const parsed = JSON.parse(cleanText);
-    res.status(200).json(parsed);
+    try {
+      const parsed = JSON.parse(cleanText);
+      res.status(200).json(parsed);
+    } catch(parseErr) {
+      res.status(200).json({ raw: cleanText, parseError: parseErr.message });
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

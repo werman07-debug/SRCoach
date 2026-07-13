@@ -1,6 +1,5 @@
-import { useState, useRef } from "react";
+        import { useState, useRef } from "react";
 
-// Keys werden sicher aus Vercel Environment Variables geladen
 const ANTHROPIC_KEY = import.meta.env.VITE_ANTHROPIC_KEY;
 const OPENAI_KEY = import.meta.env.VITE_OPENAI_KEY;
 
@@ -92,9 +91,7 @@ export default function SchiriCoachApp() {
     try {
       const res = await fetch("/api/claude", {
         method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({
           model: "claude-sonnet-4-20250514",
           max_tokens: 2000,
@@ -145,7 +142,6 @@ Antworte NUR mit einem JSON-Objekt (kein Markdown):
     return "#94a3b8";
   };
 
-  // ── HOME ──────────────────────────────────────────────────────────────────
   if (screen === "home") return (
     <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "Georgia, serif", padding: "2rem" }}>
       <div style={{ textAlign: "center", marginBottom: "2rem" }}>
@@ -153,7 +149,6 @@ Antworte NUR mit einem JSON-Objekt (kein Markdown):
         <h1 style={{ color: "#f8fafc", fontSize: "2.5rem", margin: "0.25rem 0", letterSpacing: "-0.02em" }}>SchiriCoach</h1>
         <p style={{ color: "#64748b", fontSize: "0.95rem", margin: 0 }}>Coaching-Bewertungen per Sprache</p>
       </div>
-
       <div style={{ background: "rgba(255,255,255,0.05)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "1.5rem", padding: "2rem", width: "100%", maxWidth: "400px" }}>
         {[
           ["Name Schiedsrichter/in", schiri, setSchiri],
@@ -165,7 +160,6 @@ Antworte NUR mit einem JSON-Objekt (kein Markdown):
             style={{ width: "100%", padding: "0.85rem 1rem", background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "0.75rem", color: "#f8fafc", fontSize: "1rem", fontFamily: "Georgia, serif", outline: "none", boxSizing: "border-box", marginBottom: "0.75rem" }}
           />
         ))}
-
         <button onClick={() => schiri && setScreen("session")}
           style={{ marginTop: "0.5rem", width: "100%", padding: "1rem", background: schiri ? "linear-gradient(135deg, #3b82f6, #1d4ed8)" : "#334155", color: "#fff", border: "none", borderRadius: "0.75rem", fontSize: "1.1rem", fontFamily: "Georgia, serif", cursor: schiri ? "pointer" : "not-allowed" }}>
           Sitzung starten →
@@ -174,7 +168,6 @@ Antworte NUR mit einem JSON-Objekt (kein Markdown):
     </div>
   );
 
-  // ── SESSION ───────────────────────────────────────────────────────────────
   if (screen === "session") return (
     <div style={{ minHeight: "100vh", background: "#0f172a", fontFamily: "Georgia, serif", color: "#f8fafc" }}>
       <div style={{ background: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.08)", padding: "1rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -186,7 +179,6 @@ Antworte NUR mit einem JSON-Objekt (kein Markdown):
           {notizen.length} Notiz{notizen.length !== 1 ? "en" : ""}
         </div>
       </div>
-
       <div style={{ padding: "1rem 1.5rem", maxHeight: "45vh", overflowY: "auto" }}>
         {notizen.length === 0 && (
           <div style={{ color: "#475569", textAlign: "center", padding: "3rem 0" }}>Noch keine Notizen – starte die Aufnahme!</div>
@@ -199,10 +191,8 @@ Antworte NUR mit einem JSON-Objekt (kein Markdown):
           </div>
         ))}
       </div>
-
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#0f172a", borderTop: "1px solid rgba(255,255,255,0.08)", padding: "1.5rem", display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
         {processing && <div style={{ color: "#94a3b8", fontSize: "0.85rem" }}>⏳ Transkribiere…</div>}
-
         <button
           onMouseDown={startRecording} onMouseUp={stopRecording}
           onTouchStart={(e) => { e.preventDefault(); startRecording(); }}
@@ -211,11 +201,9 @@ Antworte NUR mit einem JSON-Objekt (kein Markdown):
           style={{ width: "80px", height: "80px", borderRadius: "50%", background: recording ? "linear-gradient(135deg, #ef4444, #dc2626)" : "linear-gradient(135deg, #3b82f6, #1d4ed8)", border: "none", cursor: processing ? "not-allowed" : "pointer", fontSize: "2rem", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: recording ? "0 0 30px rgba(239,68,68,0.5)" : "0 0 20px rgba(59,130,246,0.3)", transform: recording ? "scale(1.1)" : "scale(1)", transition: "all 0.15s" }}>
           {recording ? "⏹" : "🎙️"}
         </button>
-
         <div style={{ fontSize: "0.75rem", color: "#475569" }}>
           {recording ? "Loslassen zum Stoppen" : "Halten zum Aufnehmen"}
         </div>
-
         {notizen.length >= 1 && (
           <button onClick={generiereAuswertung} disabled={generating}
             style={{ width: "100%", padding: "0.85rem", background: generating ? "#334155" : "linear-gradient(135deg, #059669, #047857)", color: "#fff", border: "none", borderRadius: "0.75rem", fontSize: "1rem", fontFamily: "Georgia, serif", cursor: generating ? "not-allowed" : "pointer" }}>
@@ -226,7 +214,6 @@ Antworte NUR mit einem JSON-Objekt (kein Markdown):
     </div>
   );
 
-  // ── AUSWERTUNG ────────────────────────────────────────────────────────────
   if (screen === "auswertung" && auswertung) return (
     <div style={{ minHeight: "100vh", background: "#0f172a", fontFamily: "Georgia, serif", color: "#f8fafc", paddingBottom: "6rem" }}>
       <div style={{ background: "linear-gradient(135deg, #1e3a5f, #0f172a)", padding: "1.5rem", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
@@ -234,18 +221,11 @@ Antworte NUR mit einem JSON-Objekt (kein Markdown):
         <div style={{ fontSize: "1.3rem", fontWeight: "bold" }}>{schiri}</div>
         <div style={{ fontSize: "0.85rem", color: "#93c5fd" }}>{datum} · {altersklasse} · {liga}</div>
         <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.75rem", flexWrap: "wrap" }}>
-          <span style={{ background: "#1e3a5f", color: "#93c5fd", borderRadius: "2rem", padding: "0.25rem 0.75rem", fontSize: "0.75rem" }}>
-            Schwierigkeit: {auswertung.schwierigkeitsgrad}
-          </span>
-          <span style={{ background: "#14532d", color: "#86efac", borderRadius: "2rem", padding: "0.25rem 0.75rem", fontSize: "0.75rem" }}>
-            Admin: {auswertung.administratives}
-          </span>
+          <span style={{ background: "#1e3a5f", color: "#93c5fd", borderRadius: "2rem", padding: "0.25rem 0.75rem", fontSize: "0.75rem" }}>Schwierigkeit: {auswertung.schwierigkeitsgrad}</span>
+          <span style={{ background: "#14532d", color: "#86efac", borderRadius: "2rem", padding: "0.25rem 0.75rem", fontSize: "0.75rem" }}>Admin: {auswertung.administratives}</span>
         </div>
       </div>
-
       <div style={{ padding: "1rem 1.5rem" }}>
-
-        {/* Bewertungsblöcke */}
         {KATEGORIEN.map(({ label, key }) => {
           const block = auswertung[key];
           if (!block) return null;
@@ -253,37 +233,27 @@ Antworte NUR mit einem JSON-Objekt (kein Markdown):
             <div key={key} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "1rem", padding: "1rem", marginBottom: "0.75rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
                 <div style={{ fontSize: "0.85rem", fontWeight: "bold", color: "#93c5fd" }}>{label}</div>
-                <span style={{ background: bewertungFarbe(block.bewertung), color: "#000", borderRadius: "0.4rem", padding: "0.2rem 0.6rem", fontSize: "0.85rem", fontWeight: "bold" }}>
-                  {block.bewertung}
-                </span>
+                <span style={{ background: bewertungFarbe(block.bewertung), color: "#000", borderRadius: "0.4rem", padding: "0.2rem 0.6rem", fontSize: "0.85rem", fontWeight: "bold" }}>{block.bewertung}</span>
               </div>
               <p style={{ fontSize: "0.85rem", color: "#94a3b8", lineHeight: "1.6", margin: 0 }}>{block.bemerkung}</p>
             </div>
           );
         })}
-
-        {/* Fazit */}
         <div style={{ background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.2)", borderRadius: "1rem", padding: "1rem", marginBottom: "0.75rem" }}>
           <div style={{ fontSize: "0.85rem", fontWeight: "bold", color: "#93c5fd", marginBottom: "0.75rem" }}>FAZIT</div>
           <div style={{ marginBottom: "0.75rem" }}>
             <div style={{ fontSize: "0.75rem", color: "#64748b", marginBottom: "0.25rem" }}>✅ POSITIV</div>
-            <div style={{ fontSize: "0.85rem", color: "#86efac", lineHeight: "1.6" }}>
-              1. {auswertung.positiv_1}<br />2. {auswertung.positiv_2}
-            </div>
+            <div style={{ fontSize: "0.85rem", color: "#86efac", lineHeight: "1.6" }}>1. {auswertung.positiv_1}<br />2. {auswertung.positiv_2}</div>
           </div>
           <div style={{ marginBottom: "0.75rem" }}>
             <div style={{ fontSize: "0.75rem", color: "#64748b", marginBottom: "0.25rem" }}>🎯 OPTIMIERUNG</div>
-            <div style={{ fontSize: "0.85rem", color: "#fbbf24", lineHeight: "1.6" }}>
-              1. {auswertung.optimierung_1}<br />2. {auswertung.optimierung_2}
-            </div>
+            <div style={{ fontSize: "0.85rem", color: "#fbbf24", lineHeight: "1.6" }}>1. {auswertung.optimierung_1}<br />2. {auswertung.optimierung_2}</div>
           </div>
           <div>
             <div style={{ fontSize: "0.75rem", color: "#64748b", marginBottom: "0.25rem" }}>📋 GESAMTEINDRUCK</div>
             <div style={{ fontSize: "0.85rem", color: "#cbd5e1", lineHeight: "1.6" }}>{auswertung.gesamteindruck}</div>
           </div>
         </div>
-
-        {/* Alle Notizen als Backup */}
         <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "1rem", padding: "1rem", marginBottom: "0.75rem" }}>
           <div style={{ fontSize: "0.85rem", fontWeight: "bold", color: "#93c5fd", marginBottom: "0.75rem" }}>📝 ALLE NOTIZEN</div>
           {notizen.map((n) => (
@@ -293,9 +263,7 @@ Antworte NUR mit einem JSON-Objekt (kein Markdown):
             </div>
           ))}
         </div>
-
       </div>
-
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#0f172a", borderTop: "1px solid rgba(255,255,255,0.08)", padding: "1rem 1.5rem", display: "flex", gap: "0.75rem" }}>
         <button onClick={() => { setNotizen([]); setAuswertung(null); setScreen("home"); }}
           style={{ flex: 1, padding: "0.85rem", background: "rgba(255,255,255,0.05)", color: "#94a3b8", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "0.75rem", fontSize: "0.9rem", fontFamily: "Georgia, serif", cursor: "pointer" }}>

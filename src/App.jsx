@@ -123,8 +123,7 @@ Antworte NUR mit einem JSON-Objekt (kein Markdown):
       });
 
       const data = await res.json();
-     const text = data.content?.[0]?.text?.replace(/```json|```/g, "").trim();
-        const parsed = JSON.parse(text);
+     const parsed = data;
       setAuswertung(parsed);
       setScreen("auswertung");
     } catch (err) {

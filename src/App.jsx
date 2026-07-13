@@ -58,7 +58,7 @@ export default function SchiriCoachApp() {
   const transkribiere = async (blob) => {
     try {
       const formData = new FormData();
-      formData.append("file", blob, "audio.webm");
+      formData.append("file", blob, "recording.mp3");
       formData.append("model", "whisper-1");
       formData.append("language", "de");
 

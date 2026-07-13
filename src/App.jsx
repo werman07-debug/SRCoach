@@ -122,8 +122,9 @@ Antworte NUR mit einem JSON-Objekt (kein Markdown):
         }),
       });
 
-      const data = await res.json();
-     Console.log("Claude Antwort:", JSON.stringify(data));
+    const data = await res.json();
+console.log("Debug:", JSON.stringify(data));
+const parsed = data.debug || data;
 const parsed = data.debug?.content?.[0]?.text ? JSON.parse(data.debug.content[0].text.replace(/```json|```/g, "").trim()) : data;
       setAuswertung(parsed);
       setScreen("auswertung");

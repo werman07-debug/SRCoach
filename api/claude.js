@@ -19,9 +19,13 @@ export default async function handler(req, res) {
       body: JSON.stringify(req.body),
     });
     const data = await response.json();
-    console.log("Anthropic response:", JSON.stringify(data));
-    res.status(200).json({ debug: data });
+    console.log("Anthropic raw:", JSON.stringify(data));
+    const rawText = data.content?.[0]?.text || "";
+    const cleanText = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
+    const parsed = JSON.parse(cleanText);
+    res.status(200).json(parsed);
   } catch (err) {
+    console.log("Error:", err.message);
     res.status(500).json({ error: err.message });
   }
 }

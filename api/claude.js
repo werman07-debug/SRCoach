@@ -19,14 +19,7 @@ export default async function handler(req, res) {
       body: JSON.stringify(req.body),
     });
     const data = await response.json();
-    const rawText = data.content?.[0]?.text || "";
-    const cleanText = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
-    try {
-      const parsed = JSON.parse(cleanText);
-      res.status(200).json(parsed);
-    } catch(parseErr) {
-      res.status(200).json({ raw: cleanText, parseError: parseErr.message });
-    }
+    res.status(200).json({ debug: data });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

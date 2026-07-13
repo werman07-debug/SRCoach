@@ -78,8 +78,8 @@ export default function SchiriCoachApp() {
           zeit: new Date().toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }),
         }]);
       }
-    } catch (err) {
-      alert("Transkription fehlgeschlagen. Bitte nochmal versuchen.");
+ } catch (err) {
+  alert("Fehler: " + err.message);
     } finally {
       setProcessing(false);
     }

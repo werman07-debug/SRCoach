@@ -69,6 +69,7 @@ export default function SchiriCoachApp() {
       });
 
       const data = await res.json();
+      console.log("Frontend data:", JSON.stringify(data));
       const text = data.text?.trim();
       if (text) {
         setNotizen((prev) => [...prev, {

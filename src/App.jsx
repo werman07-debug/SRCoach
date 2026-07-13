@@ -85,10 +85,12 @@ export default function SchiriCoachApp() {
     }
   };
 
-  const generiereAuswertung = async () => {
+const generiereAuswertung = async () => {
     setGenerating(true);
     console.log("Notizen:", notizen.length, notizen);
     const alleNotizen = notizen.map((n) => `[${n.zeit}] ${n.text}`).join("\n");
+    console.log("Starte Claude mit:", alleNotizen);
+    const res = await fetch("/api/claude", {
 
     try {
       console.log("Starte Claude mit:", alleNotizen);

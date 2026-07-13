@@ -91,6 +91,7 @@ export default function SchiriCoachApp() {
     const alleNotizen = notizen.map((n) => `[${n.zeit}] ${n.text}`).join("\n");
 
     try {
+      console.log("Starte Claude mit:", alleNotizen);
       const res = await fetch("/api/claude", {
         method: "POST",
         headers: { "content-type": "application/json" },
